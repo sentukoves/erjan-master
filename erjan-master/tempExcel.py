@@ -5,7 +5,6 @@ import os
 # import json
 from flask import Flask, render_template, redirect, request as re
 import sqlite3
-import asyncio
 
 app = Flask(__name__)
 
@@ -20,7 +19,10 @@ def parse_array():
     connect_db = sqlite3.connect(path_db)
     cursor = connect_db.cursor()
     cursor.execute('select Name from Speller')
-    return cursor.fetchall()
+    items = []
+    for items_array in cursor.fetchall():
+        items.append(items_array[0])
+    return sorted(items)
 
 
 class ReadExcel(object):
@@ -88,22 +90,34 @@ class ParseJson(ReadExcel):
 
 class qeryStatsFileParse(object):
 
-    def __init__(self, obshii_massiv = None):
+    def __init__(self, obshii_massiv=None):
         super(qeryStatsFileParse, self).__init__()
-        self.obshii_massiv = str(array_items)
+        self.obshii_massiv = array_items
         for _item in slovarParse.values():
             _item = _item[0]
-            string_find = str(_item[4] + " " + _item[6] + " " + _item[7] + " " + _item[8]).replace("-", " ").replace(",", "").split(" ")
+            string_find = str(_item[4] + " "
+                              + _item[6] + " "
+                              + _item[7] + " "
+                              + _item[8]).replace("-", " ").replace(",", "").replace("{",
+                                                                                     " ").replace(">", " ").replace("<",
+                                                                                                                    " ").replace(
+                "}", " ").split(" ")
             for val in string_find:
-                if val == 'None' or val.find('id') > -1:
-                    break
-                index = self.obshii_massiv.find(str(val).lower())
-                if index > -1:
-                   # print("Найден", val)
-                   pass
-                else:
-                    print("Не найден" , val)
-
+                if val != 'None' or val.find('id') > -1:
+                    val = str(val.lower()).strip()
+                    center = len(self.obshii_massiv) // 2
+                    indexOne = 0
+                    indexMax = len(self.obshii_massiv) - 1
+                    while self.obshii_massiv[center] != val and indexOne <= indexMax:
+                        if val > self.obshii_massiv[center]:
+                            indexOne = center + 1
+                        else:
+                            indexMax = center - 1
+                        center = (indexOne + indexMax) // 2
+                    if indexOne > indexMax:
+                        print("no value = ", val)
+                    else:
+                        print(center)
 
     #
     # for key, _items in self.array.items():
@@ -121,6 +135,7 @@ class qeryStatsFileParse(object):
     #             if cursor.fetchall():
     #                 print(cursor.fetchall())
     #
+
 
 # ____________________________
 # --- Обработчик Flask ----------------------------------------------

@@ -1,41 +1,32 @@
-from os import path as pa
-import sys
-import sqlite3
 
 
 
 
+import random
+
+arr = []
+for i in range(15200):
+    arr.append(str(random.randint(1, 99999)))
+
+att = sorted(arr)
+print(att)
+find = str(input())
+
+center = len(att)//2
+indexOne  = 0
+indexMax = len(att) -1
+
+while att[center] != find and indexOne <= indexMax:
+    if find > att[center]:
+        indexOne = center + 1
+    else:
+        indexMax = center - 1
+
+    center = (indexOne + indexMax) // 2
+
+if indexOne > indexMax:
+    print("no value")
+else:
+    print(center)
 
 
-# def sql(text):
-#     con = sqlite3.connect(pa.join(sys.path[0], 'static/Base/base.db'))
-#     cur = con.cursor()
-#     try:
-#         for _items in text:
-#             cur.execute(_items)
-#         # cur.execute("""
-#         # CREATE TABLE  Speller(
-#     # ID int,
-#     # Name varchar(255));
-#      #    """)
-#     except sqlite3.DatabaseError:
-#         print(sys.exc_info())
-#     else:
-#         con.commit()
-#         cur.close()
-#         con.close()
-#
-#
-# def eeee():
-#     BaseTextFile_Path = pa.join(sys.path[0], 'Speller/russian.txt')
-#     with open(BaseTextFile_Path, encoding='windows-1251') as russianas_text:
-#
-#         a  =[]
-#         for i, items in enumerate(russianas_text.readlines()):
-#             ite = str(items).replace("\n", "")
-#             if ite.find("Генри") > -1:
-#                 print(ite)
-#             a.append("INSERT INTO Speller (ID, Name) VALUES ({},'{}')".format(i , ite.replace('"',"").replace("'", "")))
-#         sql(a)
-#
-# eeee()
