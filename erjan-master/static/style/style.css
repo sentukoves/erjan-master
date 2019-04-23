@@ -2,7 +2,14 @@
 color :  #161a1e;
 }
 
+
+.buttonsize{
+font-size:20px;
+
+}
+
 *{
+color: white;
 background-color : #2c3136;
 }
 

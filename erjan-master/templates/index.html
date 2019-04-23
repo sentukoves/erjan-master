@@ -1,7 +1,62 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<input type="button" name="Button" value="Проверить все" onclick="location.href='?start=1'">
+
+<table class="table_dark">
+
+    <tr>
+        <td colspan="3">
+            <p>Введеите дату от</p>
+            <input type="date" name="calendarTo" value="{{datetimenow}}">
+            <p>Введеите дату до</p>
+            <input type="date" name="calendarDo" value="{{datetimenow}}">
+            <br>
+            <p> Статус </p>
+            <select name="thelist" onChange="combo(this, 'theinput')">
+                <option>ALL</option>
+                <option>033</option>
+                <option>030</option>
+                <option>013</option>
+            </select>
+            <br>
+            <br>
+            <input class="buttonsize" type="button"
+                   name="Button" value="Загрузить"
+                   onclick="location.href='?start=1'">
+            <form>
+            </form>
+        </td>
+    </tr>
+    <tr>
+
+            <tr>
+            <td>
+        <input class="buttonsize" type="button" name="Button" value="Проверить Все"
+               onclick="location.href='?start=1'">
+            </td>
+            <td>
+
+        <input class="buttonsize" type="button" name="Button" value="Проверить Наименования"
+               onclick="location.href='?start=2'">
+            </td>
+            <td>
+
+        <input class="buttonsize" type="button" name="Button" value="Проверить Атрибуты"
+               onclick="location.href='?start=3'">
+            </td>
+
+
+
+ </tr>
+    <tr>
+    <td colspan="3">
+        <input class="buttonsize" type="button" name="Button" value="Авто обучение"
+               onclick="location.href='?start=1'">
+    </td>
+   </tr>
+
+</table>
+
 <table class="table_dark">
     <tr>
         <th>Номер запроса</th>
@@ -14,6 +69,8 @@
         <th>Просмотр Атрибутов</th>
     </tr>
 
+
+    {% if flag == 1%}
     <tr>
         {% for key, item in slovar.items()%}
         <td>{{key}}</td>
@@ -23,11 +80,40 @@
         <td>
 
             <input type="button" onclick="location.href='attribyte/{{key}}'" value="Просмотр"
-                   style="{background: green;}" name="button" one>
-
+                   style="{background: green;}" name="button">
         </td>
+    </tr>
+
+    {% endfor %}
+    {% else %}
+
+
+    {% for key, item in slovar.items()%}
+    <tr>
+        <td>{{key}}</td>
+        {% for lines in item[0][:6] %}
+        <td>{{lines}}</td>
+
+        {% endfor %}
+        <td>
+
+            <input type="button" onclick="location.href='attribyte/{{key}}'" value="Просмотр"
+                   style="{background: green;}" name="button">
+        </td>
+        {% for items in item[1] %}
+    <tr>
+        <td colspan="7">{{items}}</td>
+        <td><input type="button" onclick="location.href='attribyte/{{key}}'" value="Добавить"
+                   style="{background: green;}" name="button"></td>
+    </tr>
+    {% endfor %}
 
     </tr>
     {% endfor %}
+
+
+    {% endif %}
+
+
 </table>
 {% endblock %}

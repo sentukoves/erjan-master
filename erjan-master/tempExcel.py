@@ -5,6 +5,7 @@ import os
 # import json
 from flask import Flask, render_template, redirect, request as re
 import sqlite3
+import datetime
 
 app = Flask(__name__)
 
@@ -87,24 +88,32 @@ class ParseJson(ReadExcel):
 
 # сверка с массиовом
 
-
 class qeryStatsFileParse(object):
 
-    def __init__(self, obshii_massiv=None):
+    def __init__(self, id):
         super(qeryStatsFileParse, self).__init__()
         self.obshii_massiv = array_items
-        for _item in slovarParse.values():
+        self.id = int(id)
+        if self.id > 3:
+            self.id = 1
+
+    def filterOrf(self):
+        print(self.id)
+        collection_key = {}
+        for key, _item in slovarParse.items():
             _item = _item[0]
-            string_find = str(_item[4] + " "
-                              + _item[6] + " "
-                              + _item[7] + " "
-                              + _item[8]).replace("-", " ").replace(",", "").replace("{",
-                                                                                     " ").replace(">", " ").replace("<",
-                                                                                                                    " ").replace(
-                "}", " ").split(" ")
+            string_find = str()
+            if int(self.id) == 1:
+                string_find = str(_item[4] + " " + _item[6] + " "+ _item[7] + " " + _item[8]).replace("-"," ").replace(","," ").replace("{"," ").replace(">"," ").replace("<"," ").replace("}", " ").replace("/", " ").replace('"', "").split(" ")
+            elif int(self.id) == 2:
+                string_find = str(_item[4]).replace("-", " ").replace(","," ").replace("{", " ").replace(">"," ").replace("<"," ").replace("}", " ").replace("/", " ").replace('"', "").split(" ")
+            elif int(self.id) == 3:
+                string_find = str(_item[6] + " "+ _item[7] + " " + _item[8]).replace("-", " ").replace(",", " ").replace("{", " ").replace(">", " ").replace("<", " ").replace("}", " ").replace("/", " ").replace('"', "").split(" ")
+            temp_array = []
             for val in string_find:
-                if val != 'None' or val.find('id') > -1:
+                if val != 'None' and val.find('id') == -1 and val.isdigit() != True and val != "":
                     val = str(val.lower()).strip()
+                    # Бинарный поиск в массиве
                     center = len(self.obshii_massiv) // 2
                     indexOne = 0
                     indexMax = len(self.obshii_massiv) - 1
@@ -115,29 +124,17 @@ class qeryStatsFileParse(object):
                             indexMax = center - 1
                         center = (indexOne + indexMax) // 2
                     if indexOne > indexMax:
-                        print("no value = ", val)
-                    else:
-                        print(center)
+                        temp_array.append(val)
+            if len(temp_array) > 0:
+                collection_key[key] = temp_array
 
-    #
-    # for key, _items in self.array.items():
-    #     elements = _items[0]
-    #     string_q = str(str(elements[4]) + " "
-    #                    + str(elements[6]) + " "
-    #                    + str(elements[7]) + " " +
-    #                    str(elements[8])).split(" ")
-    #     for values in string_q:
-    #         try:
-    #             cursor.execute("select a.Name  from Speller a  where a.Name = '{}'".format(values))
-    #         except sqlite3.DatabaseError:
-    #             print(sys.exc_info()[1])
-    #         else:
-    #             if cursor.fetchall():
-    #                 print(cursor.fetchall())
-    #
+        collection = {}
+        for keys in collection_key.keys():
+            items = slovarParse[keys][0]
+            collection[keys] = [items, collection_key[keys]]
 
+        return collection
 
-# ____________________________
 # --- Обработчик Flask ----------------------------------------------
 class Mass(object):
     def __init__(self):
@@ -151,11 +148,11 @@ class Mass(object):
 @app.route("/")
 def index():
     if re.method == "GET":
-        if re.args.get("start") == '1':
-            massive = array_items
-            qeryStatsFileParse(massive)
-            return redirect('/')
-        return render_template("index.html", slovar=slovarParse)
+        if re.args.get("start"):
+            id_get = re.args.get("start")
+            collection = qeryStatsFileParse(id_get).filterOrf()
+            return render_template("index.html", slovar=collection, datetimenow=datetime.datetime.now().date() , flag=0)
+        return render_template("index.html", slovar=slovarParse, datetimenow=datetime.datetime.now().date() , flag=1)
 
 
 @app.route("/attribyte/<id>")
@@ -164,8 +161,7 @@ def attribyte(id=None):
     return render_template('attribyte.html', slovar=slovar)
 
 
-# ----------------------------------------------------------------------
-
+# -------------------------Старт программы-------------------------------------------
 if __name__ == '__main__':
     slovarParse = Mass.Array_Parse()
     print("SLOVAR GOOD")
