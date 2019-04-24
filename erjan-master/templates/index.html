@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 
-
 <table class="table_dark">
 
     <tr>
@@ -22,7 +21,7 @@
             <br>
             <input class="buttonsize" type="button"
                    name="Button" value="Загрузить"
-                   onclick="location.href='?start=1'">
+                   onclick="location.href='/'">
             <form>
             </form>
         </td>
@@ -93,7 +92,6 @@
         <td>{{key}}</td>
         {% for lines in item[0][:6] %}
         <td>{{lines}}</td>
-
         {% endfor %}
         <td>
 
@@ -102,17 +100,24 @@
         </td>
         {% for items in item[1] %}
     <tr>
-        <td colspan="7">{{items}}</td>
-        <td><input type="button" onclick="location.href='attribyte/{{key}}'" value="Добавить"
-                   style="{background: green;}" name="button"></td>
+        <td colspan="6"  bgcolor="#CC3333">{{items}}</td>
+        <td>
+            <a href="?abyte={{items}}"><button onClick="changeImgSrc('{{items}}{{key}}', 'https://chastnyy-zaym.com/wp-content/uploads/2018/12/check_512.png')">Добавить</button></a>
+        </td>
+    <td>
+        <img id="{{items}}{{key}}" src="{{url_for('static', filename='img/red.png')}}" alt="img">
+    </td>
+    {% endfor %}
     </tr>
     {% endfor %}
-
-    </tr>
-    {% endfor %}
-
-
     {% endif %}
+
+<script>
+ function changeImgSrc(id, src) {
+   var img = document.getElementById(id);
+    if (img != null) img.src = src;
+  }
+</script>
 
 
 </table>

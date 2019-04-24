@@ -1,34 +1,35 @@
+import os
+import sys
+import sqlite3
+path = os.path.join(sys.path[0], 'Speller/russian.txt')
+path_base = os.path.join(sys.path[0], 'static/Base/Base.db')
+
+connect = sqlite3.connect(path_base)
+cursor = connect.cursor()
 
 
-a = '1'
-print(a.isdigit())
+def qyery(sql):
+    for sql_item in sql:
+        cursor.execute(sql_item)
 
 
-# import random
-#
-# arr = []
-# for i in range(15200):
-#     arr.append(str(random.randint(1, 99999)))
-#
-# att = sorted(arr)
-# print(att)
-# find = str(input())
-#
-# center = len(att)//2
-# indexOne  = 0
-# indexMax = len(att) -1
-#
-# while att[center] != find and indexOne <= indexMax:
-#     if find > att[center]:
-#         indexOne = center + 1
-#     else:
-#         indexMax = center - 1
-#
-#     center = (indexOne + indexMax) // 2
-#
-# if indexOne > indexMax:
-#     print("no value")
-# else:
-#     print(center)
-#
-#
+    # cursor.execute("DELETE from SPELLER")
+    connect.commit()
+    print('good')
+
+
+with open(path, encoding='windows-1251') as file:
+    array = []
+    for i , items in enumerate(file.readlines()):
+        _items = items.replace("\n", "")
+        sql_text = "INSERT INTO Speller (Name) VALUES ('{}')".format(_items.replace("'", "").replace('"', "").title())
+        array.append(sql_text)
+
+
+qyery(array)
+
+
+
+
+
+
