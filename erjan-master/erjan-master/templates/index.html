@@ -1,9 +1,66 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<<<<<<< HEAD:erjan-master/erjan-master/templates/index.html
 
 
 
+=======
+<table class="table_dark">
+
+    <tr>
+        <td colspan="3">
+            <p>Введеите дату от</p>
+            <input type="date" name="calendarTo" value="{{datetimenow}}">
+            <p>Введеите дату до</p>
+            <input type="date" name="calendarDo" value="{{datetimenow}}">
+            <br>
+            <p> Статус </p>
+            <select name="thelist" onChange="combo(this, 'theinput')">
+                <option>ALL</option>
+                <option>033</option>
+                <option>030</option>
+                <option>013</option>
+            </select>
+            <br>
+            <br>
+            <input class="buttonsize" type="button"
+                   name="Button" value="Загрузить"
+                   onclick="location.href='/'">
+            <form>
+            </form>
+        </td>
+    </tr>
+    <tr>
+
+            <tr>
+            <td>
+        <input class="buttonsize" type="button" name="Button" value="Проверить Все"
+               onclick="location.href='?start=1'">
+            </td>
+            <td>
+
+        <input class="buttonsize" type="button" name="Button" value="Проверить Наименования"
+               onclick="location.href='?start=2'">
+            </td>
+            <td>
+
+        <input class="buttonsize" type="button" name="Button" value="Проверить Атрибуты"
+               onclick="location.href='?start=3'">
+            </td>
+
+
+
+ </tr>
+    <tr>
+    <td colspan="3">
+        <input class="buttonsize" type="button" name="Button" value="Авто обучение"
+               onclick="location.href='?start=1'">
+    </td>
+   </tr>
+
+</table>
+>>>>>>> 13e3c809e7fbce7efd5a392a831d4b958b48246e:erjan-master/templates/index.html
 
 <table class="table_dark">
     <tr>
@@ -18,6 +75,10 @@
     </tr>
 
 
+<<<<<<< HEAD:erjan-master/erjan-master/templates/index.html
+=======
+    {% if flag == 1%}
+>>>>>>> 13e3c809e7fbce7efd5a392a831d4b958b48246e:erjan-master/templates/index.html
     <tr>
         {% for key, item in slovar.items()%}
         <td>{{key}}</td>
@@ -29,8 +90,41 @@
             <input type="button" onclick="location.href='attribyte/{{key}}'" value="Просмотр"
                    style="{background: green;}" name="button">
         </td>
+<<<<<<< HEAD:erjan-master/erjan-master/templates/index.html
     </tr>
     {% endfor %}
+=======
+    </tr>
+
+    {% endfor %}
+    {% else %}
+
+
+    {% for key, item in slovar.items()%}
+    <tr>
+        <td>{{key}}</td>
+        {% for lines in item[0][:6] %}
+        <td>{{lines}}</td>
+        {% endfor %}
+        <td>
+
+            <input type="button" onclick="location.href='attribyte/{{key}}'" value="Просмотр"
+                   style="{background: green;}" name="button">
+        </td>
+        {% for items in item[1] %}
+    <tr>
+        <td colspan="6"  bgcolor="#CC3333">{{items}}</td>
+        <td>
+            <a href="?abyte={{items}}"><button onClick="changeImgSrc('{{items}}{{key}}', 'https://chastnyy-zaym.com/wp-content/uploads/2018/12/check_512.png')">Добавить</button></a>
+        </td>
+    <td>
+        <img id="{{items}}{{key}}" src="{{url_for('static', filename='img/red.png')}}" alt="img">
+    </td>
+    {% endfor %}
+    </tr>
+    {% endfor %}
+    {% endif %}
+>>>>>>> 13e3c809e7fbce7efd5a392a831d4b958b48246e:erjan-master/templates/index.html
 
 <script>
  function changeImgSrc(id, src) {

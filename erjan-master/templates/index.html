@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+
+
+<table class="table_dark">
+    <tr>
+        <th>Номер запроса</th>
+        <th>Дата создания запроса</th>
+        <th>Статус запроса</th>
+        <th>Внутренний идентификатор</th>
+        <th>Глобальный идентификатор</th>
+        <th>Наименование АСУ МТР</th>
+        <th>Код</th>
+        <th>Просмотр Атрибутов</th>
+    </tr>
+
+
+    <tr>
+        {% for key, item in slovar.items()%}
+        <td>{{key}}</td>
+        {% for lines in item[0][:6] %}
+        <td>{{lines}}</td>
+        {% endfor %}
+        <td>
+
+            <input type="button" onclick="location.href='attribyte/{{key}}'" value="Просмотр"
+                   style="{background: green;}" name="button">
+        </td>
+    </tr>
+    {% endfor %}
+
+<script>
+ function changeImgSrc(id, src) {
+   var img = document.getElementById(id);
+    if (img != null) img.src = src;
+  }
+</script>
+
+
+</table>
+{% endblock %}
