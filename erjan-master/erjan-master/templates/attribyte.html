@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<table>
+        {% for item in slovar %}
+    {% if item != 'None'%}
+
+        <tr>
+        <td>
+            <div style="{color:white;}"> {{ item }}</div>
+        </td>
+     </tr>
+    {% endif %}
+        {% endfor %}
+
+</table>
+
+{% endblock %}
